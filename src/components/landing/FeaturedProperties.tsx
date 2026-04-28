@@ -126,8 +126,8 @@ const FeaturedProperties = ({
                       <span className="text-sm font-black text-blue-600">Até {formatPrice(filters.maxPrice)}</span>
                     </div>
                     <Slider
-                      defaultValue={[0, 5000000]}
-                      max={5000000}
+                      defaultValue={[0, 50000000]}
+                      max={50000000}
                       step={100000}
                       value={[filters.minPrice, filters.maxPrice]}
                       onValueChange={(vals) => updateFilters({ minPrice: vals[0], maxPrice: vals[1] })}

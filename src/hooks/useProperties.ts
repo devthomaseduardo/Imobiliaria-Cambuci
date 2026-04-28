@@ -14,7 +14,7 @@ export const useProperties = (initialFilters?: Partial<PropertyFilters>) => {
   const [filters, setFilters] = useState<PropertyFilters>({
     type: "all",
     minPrice: 0,
-    maxPrice: 5000000,
+    maxPrice: 50000000,
     search: "",
     operation: "all",
     bedrooms: "all",
@@ -37,7 +37,7 @@ export const useProperties = (initialFilters?: Partial<PropertyFilters>) => {
 
       // Filter by price
       const numericPrice = parseInt(property.price.replace(/\D/g, "")) || 0;
-      if (numericPrice < filters.minPrice || (filters.maxPrice < 5000000 && numericPrice > filters.maxPrice)) {
+      if (numericPrice < filters.minPrice || (filters.maxPrice < 50000000 && numericPrice > filters.maxPrice)) {
         return false;
       }
 
@@ -74,7 +74,7 @@ export const useProperties = (initialFilters?: Partial<PropertyFilters>) => {
     setFilters({
       type: "all",
       minPrice: 0,
-      maxPrice: 5000000,
+      maxPrice: 50000000,
       search: "",
       operation: "all",
       bedrooms: "all",

@@ -71,15 +71,15 @@ const ExplorePage = () => {
                   <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest">Faixa de Preço</h4>
                 </div>
                 <Slider 
-                  defaultValue={[0, 5000000]}
-                  max={5000000}
+                  defaultValue={[0, 50000000]}
+                  max={50000000}
                   step={100000}
                   value={[filters.minPrice, filters.maxPrice]}
                   onValueChange={(vals) => updateFilters({ minPrice: vals[0], maxPrice: vals[1] })}
                 />
                 <div className="flex justify-between text-[10px] font-black text-slate-400">
                    <span>R$ 0</span>
-                   <span>R$ 5M+</span>
+                   <span>R$ 50M+</span>
                 </div>
               </div>
             </div>
@@ -126,7 +126,7 @@ const ExplorePage = () => {
                <div className={`flex-1 overflow-y-auto px-6 py-8 ${viewMode === "grid" ? "max-w-none" : "lg:max-w-3xl"}`}>
                   <div className="mb-6">
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">
-                       {activeTab === "comprar" ? "Imóveis à venda" : "Imóveis para alugar"} em Cambuci, São Paulo - SP
+                       {activeTab === "comprar" ? "Imóveis à venda" : "Imóveis para alugar"} em São Paulo - SP
                     </p>
                     <h2 className="text-xl font-black text-slate-900 tracking-tight leading-none">
                        {properties.length} anúncios encontrados

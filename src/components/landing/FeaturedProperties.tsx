@@ -84,7 +84,7 @@ const FeaturedProperties = ({
               </Button>
               <Button 
                 className="h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl px-8 font-black shadow-lg shadow-blue-500/20"
-                onClick={() => document.getElementById("property-grid")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => document.getElementById("property-grid")?.scrollIntoView()}
               >
                 Buscar
               </Button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +22,10 @@ const AuthModal = ({ isOpen, onOpenChange, mode = "login" }: AuthModalProps) => 
   const [currentMode, setCurrentMode] = useState(mode);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) setCurrentMode(mode);
+  }, [isOpen, mode]);
 
   const handleDemoLogin = () => {
     setIsLoading(true);

@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/home.svg" alt="Cambuci Imobiliária" width="100" height="100"/>
 </p>
 
-<h1 align="center">Cambuci Imobiliária</h1>
+<h1 align="center">Imobiliária JTG</h1>
 
 <p align="center">
   <strong>Encontre o imóvel ideal com uma experiência moderna e intuitiva</strong>
@@ -63,18 +63,31 @@ A plataforma foi projetada para ser simples e intuitiva:
 Para rodar o projeto localmente, siga os passos abaixo:
 
 ```bash
-# Clonar o repositório
-git clone https://github.com/seu-usuario/cambuci-imobiliaria.git
-
-# Navegar até o diretório do projeto
-cd cambuci-imobiliaria
-
-# Instalar as dependências
+# Instalar dependências do frontend
 npm install
 
-# Iniciar o servidor de desenvolvimento
-npm run dev
+# Instalar dependências do backend
+npm --prefix backend install
+
+# Criar envs (exemplos)
+cp .env.example .env
+cp backend/.env.example backend/.env
+
+# Subir frontend + backend juntos
+npm run dev:all
 ```
+
+## 🧱 Estrutura (frontend + backend)
+
+- `src/`: frontend (Vite + React)
+- `backend/`: backend (API Express)
+
+## 🔌 Backend (API)
+
+Endpoints:
+
+- `GET /health`
+- `POST /leads` (recebe leads do frontend via `VITE_LEADS_WEBHOOK_URL`)
 
 ## 🔍 Demonstração
 

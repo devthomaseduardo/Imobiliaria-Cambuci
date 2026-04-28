@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/landing/Header";
 import Footer from "@/components/landing/Footer";
 import { useProperties } from "@/hooks/useProperties";
@@ -21,11 +21,23 @@ import { motion, AnimatePresence } from "framer-motion";
 import PropertyMap from "@/components/landing/PropertyMap";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSearchParams } from "react-router-dom";
 
 const ExplorePage = () => {
   const { properties, filters, updateFilters, resetFilters } = useProperties();
   const [viewMode, setViewMode] = useState<"split" | "grid">("split");
   const [activeTab, setActiveTab] = useState("comprar");
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const op = searchParams.get("op");
+    const q = searchParams.get("q");
+    if (q) updateFilters({ search: q });
+    if (op === "buy" || op === "rent") {
+      updateFilters({ operation: op });
+      setActiveTab(op === "buy" ? "comprar" : "alugar");
+    }
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col">

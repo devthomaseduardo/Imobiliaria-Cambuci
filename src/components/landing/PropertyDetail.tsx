@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Property } from "@/types/property";
 import { 
   Maximize2, 
   BedDouble, 
@@ -19,6 +20,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
+import { sendLead } from "@/lib/leads";
 
 // Custom WhatsApp Icon Component
 const WhatsAppIcon = ({ size = 20 }: { size?: number }) => (
@@ -34,39 +36,67 @@ const WhatsAppIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 interface PropertyDetailProps {
-  property?: any;
+  property?: Property;
 }
 
 const PropertyDetail = ({ property }: PropertyDetailProps) => {
   const [showPhone, setShowPhone] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
-  const data = property || {
-    title: "Terreno / Lote / Condomínio à venda, 435.000m² - Pau Queimado",
-    price: "R$ 16.000.000",
-    condoFee: "Isento",
-    iptuFee: "Isento",
-    address: "Pau Queimado, Piracicaba - SP",
-    area: "435.000 m²",
-    bedrooms: "--",
-    bathrooms: "--",
-    garage: "--",
-    publishedAt: "Publicado há 4 anos",
-    updatedAt: "atualizado há 1 semana",
-    advertiserCode: "174",
-    zapCode: "2519882510",
-    description: "ÁREA PARA INVESTIMENTO, AGRICULTURA, PECUÁRIA.",
-    advertiser: {
-      name: "José Carlos Pereira Júnior",
-      creci: "140456-F-SP",
-      totalProperties: 234,
-      memberSince: "27 de março de 2018",
-      photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80"
-    }
-  };
+  const data = property
+    ? {
+        title: property.title,
+        price: property.price,
+        condoFee: property.condoFee ?? "—",
+        iptuFee: property.iptuFee ?? "—",
+        address: property.address,
+        area: property.area,
+        bedrooms: String(property.bedrooms ?? "—"),
+        bathrooms: String(property.bathrooms ?? "—"),
+        garage: String(property.garage ?? "—"),
+        publishedAt: "Publicado recentemente",
+        updatedAt: "atualizado hoje",
+        advertiserCode: "JTG",
+        zapCode: property.id,
+        description: property.description ?? "",
+        advertiser: {
+          name: "Imobiliária JTG",
+          creci: "—",
+          totalProperties: 0,
+          memberSince: "—",
+          photo:
+            "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80",
+        },
+      }
+    : {
+        title: "Imóvel não encontrado",
+        price: "—",
+        condoFee: "—",
+        iptuFee: "—",
+        address: "—",
+        area: "—",
+        bedrooms: "—",
+        bathrooms: "—",
+        garage: "—",
+        publishedAt: "—",
+        updatedAt: "—",
+        advertiserCode: "—",
+        zapCode: "—",
+        description:
+          "Não encontramos este anúncio. Volte para a busca e selecione outro imóvel.",
+        advertiser: {
+          name: "Imobiliária JTG",
+          creci: "—",
+          totalProperties: 0,
+          memberSince: "—",
+          photo:
+            "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80",
+        },
+      };
 
   return (
     <div className="bg-slate-50 min-h-screen pt-24 pb-12">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Left Column: Content */}
@@ -91,7 +121,7 @@ const PropertyDetail = ({ property }: PropertyDetailProps) => {
               </div>
 
               {/* Quick Specs Grid */}
-              <div className="grid grid-cols-4 gap-4 p-6 bg-slate-50 rounded-2xl border border-slate-100">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 sm:p-6 bg-slate-50 rounded-2xl border border-slate-100">
                 <SpecItem label="Metragem" value={data.area} icon={<Maximize2 size={20} />} />
                 <SpecItem label="Quartos" value={data.bedrooms} icon={<BedDouble size={20} />} />
                 <SpecItem label="Banheiros" value={data.bathrooms} icon={<Bath size={20} />} />
@@ -166,7 +196,7 @@ const PropertyDetail = ({ property }: PropertyDetailProps) => {
 
           {/* Right Column: Contact & CTA */}
           <div className="lg:col-span-4 space-y-6">
-            <Card className="rounded-[40px] border-none shadow-2xl p-8 sticky top-24">
+            <Card className="rounded-[40px] border-none shadow-2xl p-6 sm:p-8 lg:sticky lg:top-24">
               <div className="flex flex-col items-center text-center mb-8">
                 <div className="relative mb-4">
                   <img 
@@ -186,8 +216,37 @@ const PropertyDetail = ({ property }: PropertyDetailProps) => {
               </div>
 
               <div className="space-y-3">
-                <Button className="w-full h-16 bg-[#25D366] hover:bg-[#128C7E] text-white font-black rounded-2xl flex items-center justify-center gap-3 text-lg shadow-xl shadow-emerald-500/20">
+                <Button
+                  asChild
+                  className="w-full h-16 bg-[#25D366] hover:bg-[#128C7E] text-white font-black rounded-2xl flex items-center justify-center gap-3 text-lg shadow-xl shadow-emerald-500/20"
+                >
+                  <a
+                    href={
+                      property
+                        ? `https://wa.me/5519991594444?text=${encodeURIComponent(
+                            `Olá! Tenho interesse no imóvel ${property.title} (${property.address}) - Ref: ${property.id}`,
+                          )}`
+                        : "https://wa.me/5519991594444"
+                    }
+                    onClick={async () => {
+                      if (!property) return;
+                      setIsSending(true);
+                      await sendLead({
+                        source: "whatsapp_property",
+                        createdAt: new Date().toISOString(),
+                        pageUrl: window.location.href,
+                        ref: {
+                          propertyId: property.id,
+                          propertyTitle: property.title,
+                        },
+                      });
+                      setIsSending(false);
+                    }}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                   <WhatsAppIcon size={24} /> Conversar no WhatsApp
+                  </a>
                 </Button>
                 <Button 
                   variant="outline" 

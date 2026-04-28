@@ -17,7 +17,7 @@ export const properties: Property[] = [
     isFeatured: true,
     location: { lat: -23.5615, lng: -46.6234 },
     description: "Espetacular apartamento recém-reformado no coração do Cambuci. Acabamento em porcelanato, varanda gourmet e vista panorâmica para o Parque da Aclimação.",
-    features: { bedrooms: 3, bathrooms: 2, area: "95m²" }
+    features: { bedrooms: 3, bathrooms: 2, area: "95m²", type: "apartment" }
   },
   {
     id: "2",
@@ -35,7 +35,7 @@ export const properties: Property[] = [
     isFeatured: true,
     location: { lat: -23.5838, lng: -46.6775 },
     description: "O auge da sofisticação no Itaim Bibi. Pé direito duplo, automação completa e acabamentos importados. Vista infinita para o skyline da Faria Lima.",
-    features: { bedrooms: 4, bathrooms: 5, area: "350m²" }
+    features: { bedrooms: 4, bathrooms: 5, area: "350m²", type: "apartment" }
   },
   {
     id: "3",
@@ -53,7 +53,7 @@ export const properties: Property[] = [
     isFeatured: false,
     location: { lat: -23.5663, lng: -46.6811 },
     description: "Design industrial em um dos bairros mais vibrantes de SP. Janelas amplas, luz natural abundante e condomínio com lazer completo no rooftop.",
-    features: { bedrooms: 1, bathrooms: 1, area: "42m²" }
+    features: { bedrooms: 1, bathrooms: 1, area: "42m²", type: "apartment" }
   },
   {
     id: "4",
@@ -71,7 +71,7 @@ export const properties: Property[] = [
     isFeatured: true,
     location: { lat: -22.7253, lng: -47.6476 },
     description: "ÁREA PARA INVESTIMENTO, AGRICULTURA, PECUÁRIA. Fazenda espetacular com infraestrutura completa para lazer e produção.",
-    features: { bedrooms: 6, bathrooms: 8, area: "435.000m²" }
+    features: { bedrooms: 6, bathrooms: 8, area: "435.000m²", type: "house" }
   },
   {
     id: "5",
@@ -89,7 +89,7 @@ export const properties: Property[] = [
     isFeatured: true,
     location: { lat: -23.6015, lng: -46.6614 },
     description: "Cobertura exclusiva fora da rota de aviões. Piscina privativa, amplo terraço e acabamento de altíssimo luxo. O coração de Moema ao seu alcance.",
-    features: { bedrooms: 4, bathrooms: 6, area: "280m²" }
+    features: { bedrooms: 4, bathrooms: 6, area: "280m²", type: "apartment" }
   },
   {
     id: "6",
@@ -107,7 +107,7 @@ export const properties: Property[] = [
     isFeatured: true,
     location: { lat: -23.5785, lng: -46.6714 },
     description: "Clássico contemporâneo no bairro mais nobre de SP. Projeto de paisagismo impecável, piscina aquecida e segurança total. Privacidade absoluta.",
-    features: { bedrooms: 5, bathrooms: 7, area: "600m²" }
+    features: { bedrooms: 5, bathrooms: 7, area: "600m²", type: "house" }
   },
   {
     id: "7",
@@ -125,6 +125,6 @@ export const properties: Property[] = [
     isFeatured: false,
     location: { lat: -23.5891, lng: -46.6341 },
     description: "Próximo à ESPM e ao metrô. Perfeito para estudantes e investidores. Condomínio com coworking, academia e piscina.",
-    features: { bedrooms: 1, bathrooms: 1, area: "35m²" }
+    features: { bedrooms: 1, bathrooms: 1, area: "35m²", type: "apartment" }
   }
 ];

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/landing/Header";
 import HeroSection from "@/components/landing/HeroSection";
 import FeaturedProperties from "@/components/landing/FeaturedProperties";
@@ -18,6 +18,12 @@ const LandingPage = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register" | "alert">("login");
   const [isListPropertyOpen, setIsListPropertyOpen] = useState(false);
+  const [showNudgeDot, setShowNudgeDot] = useState(false);
+
+  useEffect(() => {
+    const t = window.setTimeout(() => setShowNudgeDot(true), 15000);
+    return () => window.clearTimeout(t);
+  }, []);
 
   const openAlerts = () => {
     setAuthMode("alert");
@@ -30,11 +36,11 @@ const LandingPage = () => {
         <Header />
         
         {/* Floating Action Buttons for Backend Features */}
-        <div className="fixed bottom-8 right-8 z-40 flex flex-col gap-4">
+        <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-40 flex flex-col items-end gap-3 sm:gap-4">
            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button 
                 onClick={() => setIsListPropertyOpen(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-black rounded-full h-14 px-6 shadow-2xl shadow-blue-500/40 flex items-center gap-2 border-2 border-white/20"
+                className="relative w-auto max-w-[92vw] bg-blue-600 hover:bg-blue-700 text-white font-black rounded-full h-14 px-6 shadow-2xl shadow-blue-500/40 flex items-center justify-center gap-2 border-2 border-white/20"
               >
                 <PlusCircle size={20} />
                 Anunciar Imóvel
@@ -43,10 +49,16 @@ const LandingPage = () => {
            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button 
                 onClick={openAlerts}
-                className="bg-slate-900 hover:bg-slate-800 text-white font-black rounded-full h-14 px-6 shadow-2xl shadow-slate-900/40 flex items-center gap-2 border-2 border-white/10"
+                className="relative w-auto max-w-[92vw] bg-slate-900 hover:bg-slate-800 text-white font-black rounded-full h-14 px-6 shadow-2xl shadow-slate-900/40 flex items-center justify-center gap-2 border-2 border-white/10"
               >
                 <BellRing size={20} />
                 Receber Alertas
+                {showNudgeDot && (
+                  <span className="absolute -top-1 -right-1">
+                    <span className="absolute inline-flex h-3 w-3 rounded-full bg-blue-500 opacity-75 animate-ping" />
+                    <span className="relative inline-flex h-3 w-3 rounded-full bg-blue-500 ring-2 ring-slate-950" />
+                  </span>
+                )}
               </Button>
            </motion.div>
         </div>

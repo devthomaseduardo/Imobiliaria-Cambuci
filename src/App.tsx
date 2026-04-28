@@ -9,7 +9,6 @@ import SavedPropertiesPage from "./pages/SavedPropertiesPage";
 import FinancingPage from "./pages/FinancingPage";
 import LegalPage from "./pages/LegalPage";
 import { PropertyProvider } from "./context/PropertyContext";
-import { properties } from "./data/properties";
 
 function App() {
   return (
@@ -22,7 +21,7 @@ function App() {
           <Route path="/explore" element={<ExplorePage />} />
           <Route
             path="/property/:id"
-            element={<PropertyDetailPage properties={properties} />}
+            element={<PropertyDetailPage />}
           />
           <Route path="/saved" element={<SavedPropertiesPage />} />
           <Route path="/financing" element={<FinancingPage />} />

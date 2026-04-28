@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Heart, Maximize2, BedDouble, Bath, Car, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 // Custom WhatsApp Icon Component
 const WhatsAppIcon = ({ size = 20 }: { size?: number }) => (
@@ -79,9 +80,11 @@ const PropertyCard = ({
                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
                      {propertyType} à venda com {area} • {bedrooms} quartos • {bathrooms} banheiros • {garage} vaga
                    </p>
-                   <h3 className="text-xl font-black text-slate-900 tracking-tight leading-tight group-hover:text-blue-600 transition-colors">
-                     {title}
-                   </h3>
+                   <Link to={`/property/${id}`} className="block">
+                     <h3 className="text-xl font-black text-slate-900 tracking-tight leading-tight group-hover:text-blue-600 transition-colors">
+                       {title}
+                     </h3>
+                   </Link>
                    <p className="text-slate-500 text-xs font-medium flex items-center gap-1 mt-1">
                      <MapPin size={12} className="text-slate-400" /> {address}
                    </p>
@@ -106,12 +109,8 @@ const PropertyCard = ({
                   <p className="text-[10px] font-bold text-emerald-500 uppercase">Preço abaixo do mercado</p>
                 </div>
               </div>
-              <Button 
-                onClick={() => onViewDetails(id)}
-                className="bg-[#25D366] hover:bg-[#128C7E] text-white font-black rounded-xl px-8 h-12 flex items-center gap-2 shadow-lg shadow-emerald-500/20"
-              >
-                <WhatsAppIcon size={20} />
-                WhatsApp
+              <Button asChild className="bg-slate-900 hover:bg-slate-800 text-white font-black rounded-xl px-8 h-12 flex items-center gap-2 shadow-lg">
+                <Link to={`/property/${id}`}>Ver detalhes</Link>
               </Button>
             </div>
           </CardContent>
@@ -143,12 +142,9 @@ const PropertyCard = ({
           </button>
           
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-             <Button 
-               onClick={() => onViewDetails(id)}
-               className="w-full bg-white text-slate-900 font-black rounded-2xl h-12 hover:bg-blue-600 hover:text-white transition-all shadow-xl"
-             >
-                Explorar Ativo
-             </Button>
+            <Button asChild className="w-full bg-white text-slate-900 font-black rounded-2xl h-12 hover:bg-blue-600 hover:text-white transition-all shadow-xl">
+              <Link to={`/property/${id}`}>Explorar Ativo</Link>
+            </Button>
           </div>
         </div>
 
@@ -177,9 +173,8 @@ const PropertyCard = ({
         </CardContent>
 
         <CardFooter className="p-6 pt-0">
-          <Button className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black rounded-2xl h-14 shadow-lg shadow-emerald-500/20 flex items-center gap-2 text-lg">
-            <WhatsAppIcon size={22} />
-            WhatsApp
+          <Button asChild className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black rounded-2xl h-14 shadow-lg flex items-center gap-2 text-lg">
+            <Link to={`/property/${id}`}>Ver detalhes</Link>
           </Button>
         </CardFooter>
       </Card>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Star } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -7,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { motion } from "framer-motion";
 
 interface TestimonialProps {
   name: string;
@@ -14,6 +15,7 @@ interface TestimonialProps {
   rating: number;
   testimonial: string;
   location: string;
+  role?: string;
 }
 
 interface TestimonialsCarouselProps {
@@ -24,35 +26,49 @@ const TestimonialsCarousel = ({
   testimonials = defaultTestimonials,
 }: TestimonialsCarouselProps) => {
   return (
-    <section className="w-full py-16 bg-blue-50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-blue-900 mb-2">
-            O que nossos clientes dizem
-          </h2>
-          <p className="text-blue-700 max-w-2xl mx-auto">
-            Descubra por que tantas famílias escolheram nossos serviços para
-            encontrar o lar perfeito no Cambuci.
-          </p>
+    <section className="w-full py-24 bg-white border-t border-slate-100">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div className="max-w-2xl">
+            <span className="text-blue-600 font-black uppercase tracking-widest text-xs mb-4 block">Depoimentos Reais</span>
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-4">
+              A satisfação de quem investe com <span className="text-blue-600">inteligência.</span>
+            </h2>
+            <p className="text-slate-500 text-lg font-medium leading-relaxed">
+              Mais do que vender imóveis, entregamos resultados e lares que transformam a experiência de viver no Cambuci.
+            </p>
+          </div>
+          <div className="flex gap-2">
+             <div className="bg-slate-50 px-6 py-4 rounded-2xl border border-slate-100 text-center">
+                <span className="block text-2xl font-black text-slate-900">4.9/5</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Avaliação Média</span>
+             </div>
+             <div className="bg-blue-600 px-6 py-4 rounded-2xl text-center text-white">
+                <span className="block text-2xl font-black">+1.2k</span>
+                <span className="text-[10px] font-bold text-blue-200 uppercase tracking-widest">Clientes Atendidos</span>
+             </div>
+          </div>
         </div>
 
-        <div className="relative px-12">
+        <div className="relative px-4">
           <Carousel
             opts={{
-              align: "center",
+              align: "start",
               loop: true,
             }}
             className="w-full"
           >
-            <CarouselContent>
+            <CarouselContent className="-ml-4">
               {testimonials.map((testimonial, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
                   <TestimonialCard testimonial={testimonial} />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="-left-4 bg-white text-blue-700 border-blue-200 hover:bg-blue-100 hover:text-blue-800" />
-            <CarouselNext className="-right-4 bg-white text-blue-700 border-blue-200 hover:bg-blue-100 hover:text-blue-800" />
+            <div className="flex justify-center gap-4 mt-12 md:hidden">
+              <CarouselPrevious className="static translate-y-0" />
+              <CarouselNext className="static translate-y-0" />
+            </div>
           </Carousel>
         </div>
       </div>
@@ -66,9 +82,19 @@ const TestimonialCard = ({
   testimonial: TestimonialProps;
 }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md h-full flex flex-col border border-blue-100 transition-transform hover:scale-[1.02]">
-      <div className="flex items-center mb-4">
-        <div className="w-14 h-14 rounded-full overflow-hidden mr-4 border-2 border-orange-400">
+    <motion.div 
+      whileHover={{ y: -5 }}
+      className="bg-slate-50 p-8 rounded-3xl h-full flex flex-col border border-slate-100 transition-all hover:bg-white hover:shadow-2xl hover:shadow-blue-500/5 group"
+    >
+      <div className="mb-6 relative">
+        <Quote className="absolute -top-4 -left-4 text-blue-200 h-12 w-12 opacity-50 group-hover:text-blue-500 transition-colors" />
+        <p className="text-slate-700 font-medium leading-relaxed italic relative z-10">
+          "{testimonial.testimonial}"
+        </p>
+      </div>
+      
+      <div className="mt-auto pt-8 border-t border-slate-200 flex items-center gap-4">
+        <div className="w-14 h-14 rounded-2xl overflow-hidden shrink-0 grayscale hover:grayscale-0 transition-all duration-500">
           <img
             src={testimonial.photo}
             alt={`Foto de ${testimonial.name}`}
@@ -76,69 +102,71 @@ const TestimonialCard = ({
           />
         </div>
         <div>
-          <h3 className="font-semibold text-blue-900">{testimonial.name}</h3>
-          <p className="text-sm text-gray-600">{testimonial.location}</p>
-          <div className="flex mt-1">
+          <h3 className="font-black text-slate-900 tracking-tight">{testimonial.name}</h3>
+          <p className="text-[11px] font-bold text-blue-600 uppercase tracking-widest">{testimonial.role || "Proprietário"}</p>
+          <div className="flex mt-1 gap-0.5">
             {Array.from({ length: 5 }).map((_, i) => (
               <Star
                 key={i}
-                size={16}
+                size={12}
                 className={
                   i < testimonial.rating
-                    ? "text-yellow-500 fill-yellow-500"
-                    : "text-gray-300"
+                    ? "text-amber-400 fill-amber-400"
+                    : "text-slate-200"
                 }
               />
             ))}
           </div>
         </div>
       </div>
-      <p className="text-gray-700 italic flex-grow">
-        "{testimonial.testimonial}"
-      </p>
-    </div>
+    </motion.div>
   );
 };
 
 const defaultTestimonials: TestimonialProps[] = [
   {
-    name: "Ana Silva",
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ana",
+    name: "Ricardo Oliveira",
+    role: "Investidor Imobiliário",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200&h=200",
     rating: 5,
     testimonial:
-      "Encontrei meu apartamento perfeito no Cambuci graças à equipe incrível. O processo foi rápido e sem complicações. Recomendo a todos!",
+      "A análise de mercado da Imobiliária JTG foi decisiva para meu investimento. Encontrei um ativo com ROI acima de 8% ao ano no coração do bairro. Profissionalismo impecável.",
     location: "Cambuci, São Paulo",
   },
   {
-    name: "Carlos Oliveira",
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos",
-    rating: 4,
-    testimonial:
-      "Excelente atendimento e profissionalismo. Consegui um ótimo negócio em um prédio novo da região. Estou muito satisfeito com minha escolha.",
-    location: "Cambuci, São Paulo",
-  },
-  {
-    name: "Mariana Costa",
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mariana",
+    name: "Camila Vasconcelos",
+    role: "Advogada",
+    photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200&h=200",
     rating: 5,
     testimonial:
-      "Depois de meses procurando, finalmente encontrei meu lar ideal no Cambuci com a ajuda desta imobiliária. O corretor entendeu exatamente o que eu precisava!",
+      "Depois de meses procurando sozinha, a equipe entendeu exatamente o perfil de imóvel que eu precisava. O processo jurídico foi transparente e extremamente seguro.",
     location: "Cambuci, São Paulo",
   },
   {
-    name: "Pedro Santos",
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pedro",
+    name: "Dr. Fernando Almeida",
+    role: "Médico",
+    photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200&h=200",
     rating: 5,
     testimonial:
-      "Processo transparente do início ao fim. Encontrei um apartamento com excelente custo-benefício e localização privilegiada no bairro.",
+      "Excelente curadoria de imóveis. Não perdi tempo com visitas irrelevantes. O imóvel que comprei superou todas as expectativas de acabamento e localização.",
     location: "Cambuci, São Paulo",
   },
   {
-    name: "Juliana Mendes",
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Juliana",
-    rating: 4,
+    name: "Beatriz Lopes",
+    role: "Empresária",
+    photo: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200",
+    rating: 5,
     testimonial:
-      "Atendimento personalizado e profissionais que realmente conhecem o mercado imobiliário do Cambuci. Estou muito feliz com minha nova casa!",
+      "Transparência é a palavra chave. Todo o dossier do imóvel estava completo, sem surpresas negativas. A melhor imobiliária com quem já negociei em São Paulo.",
+    location: "Cambuci, São Paulo",
+  },
+  {
+    name: "Roberto Cavalcante",
+    role: "Engenheiro Sênior",
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200&h=200",
+    rating: 5,
+    testimonial:
+      "Impressionado com o conhecimento técnico dos corretores sobre a infraestrutura do bairro. Me ajudaram a encontrar uma cobertura com potencial de valorização absurdo.",
     location: "Cambuci, São Paulo",
   },
 ];

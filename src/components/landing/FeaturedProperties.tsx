@@ -1,312 +1,201 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Search, Home, Building, Building2 } from "lucide-react";
+import { 
+  Search, 
+  Home, 
+  Building, 
+  Building2, 
+  Filter, 
+  X, 
+  ArrowRight,
+  TrendingUp,
+  MapPin
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import PropertyCard from "./PropertyCard";
-import { usePropertyContext } from "@/context/PropertyContext";
-
-interface Property {
-  id: string;
-  image: string;
-  title: string;
-  price: string;
-  address: string;
-  features: {
-    bedrooms: number;
-    bathrooms: number;
-    area: string;
-    type: string;
-  };
-  isFeatured: boolean;
-  propertyType: "apartment" | "house" | "commercial";
-}
+import { useProperties } from "@/hooks/useProperties";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface FeaturedPropertiesProps {
   title?: string;
-  subtitle?: string;
-  properties?: Property[];
 }
 
 const FeaturedProperties = ({
-  title = "Imóveis em Destaque no Cambuci",
-  subtitle = "Encontre as melhores opções de imóveis disponíveis neste charmoso bairro de São Paulo",
-  properties = [
-    {
-      id: "1",
-      image:
-        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80",
-      title: "Apartamento Moderno",
-      price: "R$ 450.000",
-      address: "Rua Lavapés, 100 - Cambuci",
-      features: {
-        bedrooms: 2,
-        bathrooms: 1,
-        area: "75m²",
-        type: "Apartamento",
-      },
-      isFeatured: true,
-      propertyType: "apartment",
-    },
-    {
-      id: "2",
-      image:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80",
-      title: "Casa com Quintal",
-      price: "R$ 780.000",
-      address: "Rua Justo Azambuja, 42 - Cambuci",
-      features: {
-        bedrooms: 3,
-        bathrooms: 2,
-        area: "120m²",
-        type: "Casa",
-      },
-      isFeatured: false,
-      propertyType: "house",
-    },
-    {
-      id: "3",
-      image:
-        "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80",
-      title: "Sala Comercial",
-      price: "R$ 320.000",
-      address: "Av. Lins de Vasconcelos, 355 - Cambuci",
-      features: {
-        bedrooms: 0,
-        bathrooms: 1,
-        area: "45m²",
-        type: "Comercial",
-      },
-      isFeatured: false,
-      propertyType: "commercial",
-    },
-    {
-      id: "4",
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
-      title: "Apartamento Garden",
-      price: "R$ 650.000",
-      address: "Rua Climaco Barbosa, 77 - Cambuci",
-      features: {
-        bedrooms: 3,
-        bathrooms: 2,
-        area: "95m²",
-        type: "Apartamento",
-      },
-      isFeatured: true,
-      propertyType: "apartment",
-    },
-    {
-      id: "5",
-      image:
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80",
-      title: "Sobrado Reformado",
-      price: "R$ 920.000",
-      address: "Rua do Lavapés, 230 - Cambuci",
-      features: {
-        bedrooms: 4,
-        bathrooms: 3,
-        area: "180m²",
-        type: "Casa",
-      },
-      isFeatured: false,
-      propertyType: "house",
-    },
-    {
-      id: "6",
-      image:
-        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&q=80",
-      title: "Loja Térrea",
-      price: "R$ 550.000",
-      address: "Av. Lacerda Franco, 123 - Cambuci",
-      features: {
-        bedrooms: 0,
-        bathrooms: 1,
-        area: "70m²",
-        type: "Comercial",
-      },
-      isFeatured: false,
-      propertyType: "commercial",
-    },
-  ],
+  title = "Oportunidades Selecionadas",
 }: FeaturedPropertiesProps) => {
-  const [activeTab, setActiveTab] = useState<string>("all");
-  const [priceRange, setPriceRange] = useState<number[]>([300000, 1000000]);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const { isSaved } = usePropertyContext();
+  const { properties, filters, updateFilters, resetFilters } = useProperties();
+  const [isFilterExpanded, setIsFilterExpanded] = useState(false);
 
-  // Filter properties based on active tab, price range and search term
-  const filteredProperties = properties.filter((property) => {
-    // Filter by property type
-    if (activeTab !== "all" && property.propertyType !== activeTab) {
-      return false;
-    }
-
-    // Filter by price (convert string price to number for comparison)
-    const numericPrice = parseInt(property.price.replace(/\D/g, ""));
-    if (numericPrice < priceRange[0] || numericPrice > priceRange[1]) {
-      return false;
-    }
-
-    // Filter by search term
-    if (
-      searchTerm &&
-      !(
-        property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.address.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    ) {
-      return false;
-    }
-
-    return true;
-  });
-
-  // Format price for display
   const formatPrice = (price: number) => {
-    return `R$ ${price.toLocaleString("pt-BR")}`;
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      maximumFractionDigits: 0,
+    }).format(price);
   };
 
   return (
-    <section className="py-16 px-4 md:px-8 bg-gray-50">
+    <section className="py-24 px-6 bg-white" id="properties">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-blue-800 mb-4">
-            {title}
-          </h2>
-          <p className="text-gray-600 max-w-3xl mx-auto">{subtitle}</p>
-        </div>
-
-        {/* Filters */}
-        <div className="bg-white p-6 rounded-xl shadow-md mb-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="relative">
-              <Input
-                placeholder="Buscar por endereço ou título"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            </div>
-
-            <div>
-              <Select
-                defaultValue="all"
-                onValueChange={(value) => setActiveTab(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Tipo de Imóvel" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos os Imóveis</SelectItem>
-                  <SelectItem value="apartment">Apartamentos</SelectItem>
-                  <SelectItem value="house">Casas</SelectItem>
-                  <SelectItem value="commercial">Comercial</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <div className="flex flex-col space-y-2">
-                <span className="text-sm text-gray-500">
-                  Faixa de Preço: {formatPrice(priceRange[0])} -{" "}
-                  {formatPrice(priceRange[1])}
-                </span>
-                <Slider
-                  defaultValue={[300000, 1000000]}
-                  min={100000}
-                  max={2000000}
-                  step={50000}
-                  value={priceRange}
-                  onValueChange={setPriceRange}
-                  className="py-4"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Property Type Tabs */}
-        <Tabs defaultValue="all" className="mb-8" onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-4 w-full max-w-md mx-auto">
-            <TabsTrigger value="all" className="flex items-center gap-2">
-              <span>Todos</span>
-            </TabsTrigger>
-            <TabsTrigger value="apartment" className="flex items-center gap-2">
-              <Building className="h-4 w-4" />
-              <span>Apartamentos</span>
-            </TabsTrigger>
-            <TabsTrigger value="house" className="flex items-center gap-2">
-              <Home className="h-4 w-4" />
-              <span>Casas</span>
-            </TabsTrigger>
-            <TabsTrigger value="commercial" className="flex items-center gap-2">
-              <Building2 className="h-4 w-4" />
-              <span>Comercial</span>
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-
-        {/* Properties Grid */}
-        {filteredProperties.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProperties.map((property) => (
-              <PropertyCard
-                key={property.id}
-                id={property.id}
-                image={property.image}
-                title={property.title}
-                price={property.price}
-                address={property.address}
-                features={property.features}
-                isFeatured={property.isFeatured}
-                location={property.location || { lat: -23.5505, lng: -46.6333 }}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16 bg-white rounded-lg shadow">
-            <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <Search className="h-8 w-8 text-gray-400" />
-            </div>
-            <h3 className="text-xl font-medium text-gray-900 mb-2">
-              Nenhum imóvel encontrado
-            </h3>
-            <p className="text-gray-500">
-              Tente ajustar seus filtros para ver mais opções
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div className="max-w-2xl">
+            <span className="text-blue-600 font-black uppercase tracking-widest text-xs mb-4 block">Curadoria JTG</span>
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-4">
+              {title}
+            </h2>
+            <p className="text-slate-500 text-lg font-medium">
+              Ativos imobiliários de alta liquidez e potencial de valorização no Cambuci.
             </p>
           </div>
-        )}
-
-        {/* View All Button */}
-        {filteredProperties.length > 0 && (
-          <div className="mt-12 text-center flex justify-center gap-4">
-            <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-2">
-              Ver Todos os Imóveis
+          <Link to="/explore">
+            <Button variant="link" className="text-blue-600 font-black flex items-center gap-2 group p-0">
+              Ver mapa completo <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
             </Button>
-            <Link to="/saved">
-              <Button
-                variant="outline"
-                className="border-orange-500 text-orange-500 hover:bg-orange-50 px-8 py-2"
+          </Link>
+        </div>
+
+        {/* Modern Integrated Filter System */}
+        <div className="bg-slate-50 rounded-[32px] p-2 mb-12 border border-slate-100 shadow-sm">
+          <div className="flex flex-col md:flex-row items-center gap-2">
+            <div className="relative flex-1 w-full">
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+              <Input
+                placeholder="Rua, condomínio ou característica..."
+                value={filters.search}
+                onChange={(e) => updateFilters({ search: e.target.value })}
+                className="h-16 pl-14 bg-transparent border-none focus-visible:ring-0 text-lg font-bold text-slate-900 placeholder:text-slate-300"
+              />
+            </div>
+            
+            <div className="flex items-center gap-2 p-2 w-full md:w-auto">
+              <Button 
+                variant="ghost" 
+                onClick={() => setIsFilterExpanded(!isFilterExpanded)}
+                className={`h-12 rounded-2xl flex items-center gap-2 px-6 font-black transition-all ${isFilterExpanded ? "bg-white shadow-sm text-blue-600" : "text-slate-600"}`}
               >
-                Ver Imóveis Salvos
+                <Filter size={18} />
+                Filtros
+                {Object.values(filters).some(v => v !== "all" && v !== "" && v !== 0 && v !== 5000000) && (
+                  <span className="h-2 w-2 bg-blue-600 rounded-full"></span>
+                )}
               </Button>
-            </Link>
+              <Button 
+                className="h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl px-8 font-black shadow-lg shadow-blue-500/20"
+                onClick={() => document.getElementById("property-grid")?.scrollIntoView({ behavior: "smooth" })}
+              >
+                Buscar
+              </Button>
+            </div>
           </div>
-        )}
+
+          <AnimatePresence>
+            {isFilterExpanded && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="p-6 pt-2 border-t border-slate-200/50 mt-2 grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Tipo de Ativo</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { id: "all", label: "Todos", icon: <LayoutGrid size={14} /> },
+                        { id: "apartment", label: "Aptos", icon: <Building size={14} /> },
+                        { id: "house", label: "Casas", icon: <Home size={14} /> },
+                        { id: "commercial", label: "Comercial", icon: <Building2 size={14} /> }
+                      ].map(type => (
+                        <button
+                          key={type.id}
+                          onClick={() => updateFilters({ type: type.id })}
+                          className={`flex items-center gap-2 px-4 py-3 rounded-xl font-bold text-sm transition-all border ${filters.type === type.id ? "bg-white border-blue-600 text-blue-600 shadow-sm" : "bg-transparent border-transparent text-slate-500 hover:bg-white"}`}
+                        >
+                          {type.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-end">
+                      <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Orçamento</label>
+                      <span className="text-sm font-black text-blue-600">Até {formatPrice(filters.maxPrice)}</span>
+                    </div>
+                    <Slider
+                      defaultValue={[0, 5000000]}
+                      max={5000000}
+                      step={100000}
+                      value={[filters.minPrice, filters.maxPrice]}
+                      onValueChange={(vals) => updateFilters({ minPrice: vals[0], maxPrice: vals[1] })}
+                      className="py-2"
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Configuração</label>
+                    <div className="flex gap-2">
+                      {["all", "1", "2", "3", "4"].map(num => (
+                        <button
+                          key={num}
+                          onClick={() => updateFilters({ bedrooms: num })}
+                          className={`flex-1 h-12 rounded-xl border font-black text-xs transition-all ${filters.bedrooms === num ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-200 text-slate-600 hover:border-blue-600"}`}
+                        >
+                          {num === "all" ? "TODOS" : `${num}+ DORM`}
+                        </button>
+                      ))}
+                    </div>
+                    <button 
+                      onClick={resetFilters}
+                      className="text-xs font-black text-blue-600 flex items-center gap-2 hover:underline pt-2"
+                    >
+                      <X size={14} /> Limpar todos os filtros
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Properties Grid */}
+        <div id="property-grid">
+          {properties.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {properties.map((property) => (
+                <PropertyCard key={property.id} {...property} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-32 bg-slate-50 rounded-[40px] border-2 border-dashed border-slate-200">
+              <div className="mx-auto w-24 h-24 bg-white rounded-3xl shadow-xl flex items-center justify-center mb-6">
+                <Search className="h-10 w-10 text-slate-200" />
+              </div>
+              <h3 className="text-2xl font-black text-slate-900 mb-2">Nenhum ativo encontrado</h3>
+              <p className="text-slate-500 font-medium max-w-xs mx-auto mb-8">
+                Refine seus critérios de busca para encontrar novas oportunidades de investimento.
+              </p>
+              <Button onClick={resetFilters} variant="outline" className="rounded-2xl font-black px-8 border-slate-200">
+                Resetar Filtros
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
 };
+
+const LayoutGrid = ({ size }: { size: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="7" height="7" x="3" y="3" rx="1" />
+    <rect width="7" height="7" x="14" y="3" rx="1" />
+    <rect width="7" height="7" x="14" y="14" rx="1" />
+    <rect width="7" height="7" x="3" y="14" rx="1" />
+  </svg>
+);
 
 export default FeaturedProperties;

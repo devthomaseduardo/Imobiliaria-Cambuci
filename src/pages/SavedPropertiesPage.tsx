@@ -4,88 +4,73 @@ import Footer from "@/components/landing/Footer";
 import { usePropertyContext } from "@/context/PropertyContext";
 import PropertyCard from "@/components/landing/PropertyCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Heart, Search } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const SavedPropertiesPage = () => {
   const { savedProperties } = usePropertyContext();
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="pt-20">
-        <Header />
-        <main className="container mx-auto px-4 py-12">
-          <div className="mb-8 flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-blue-800 mb-2">
-                Imóveis Salvos
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+      <Header />
+      
+      <main className="flex-1 pt-32 pb-24">
+        <div className="container mx-auto px-6">
+          <div className="mb-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
+            <div className="space-y-2">
+              <span className="text-blue-600 font-black uppercase tracking-widest text-[10px]">Coleção Exclusiva</span>
+              <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter leading-none">
+                Seus Desejos JTG
               </h1>
-              <p className="text-gray-600">
+              <p className="text-slate-500 font-medium text-lg">
                 {savedProperties.length > 0
-                  ? `Você tem ${savedProperties.length} imóveis salvos`
-                  : "Você ainda não salvou nenhum imóvel"}
+                  ? `Você selecionou ${savedProperties.length} ativos de alta performance.`
+                  : "Sua lista de interesses está aguardando novas seleções."}
               </p>
             </div>
-            <Link to="/landing">
-              <Button variant="outline" className="flex items-center gap-2">
-                <ArrowLeft size={16} />
-                Voltar
+            <Link to="/explore">
+              <Button variant="outline" className="h-14 px-8 rounded-2xl border-slate-200 font-black text-slate-900 flex items-center gap-2 hover:bg-white shadow-sm">
+                <Search size={18} /> Continuar Explorando
               </Button>
             </Link>
           </div>
 
           {savedProperties.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
               {savedProperties.map((property) => (
                 <PropertyCard
                   key={property.id}
-                  image={property.image}
-                  title={property.title}
-                  price={property.price}
-                  address={property.address}
-                  features={property.features}
-                  isFeatured={property.isFeatured}
-                  id={property.id}
-                  location={property.location}
-                  showRemoveButton
+                  {...property}
                 />
               ))}
-            </div>
+            </motion.div>
           ) : (
-            <div className="text-center py-16 bg-white rounded-lg shadow">
-              <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
+            <div className="max-w-md mx-auto text-center py-24 px-8 bg-white rounded-[40px] shadow-2xl shadow-slate-200/50">
+              <div className="mx-auto w-24 h-24 bg-slate-50 text-slate-200 rounded-full flex items-center justify-center mb-8">
+                <Heart size={48} className="fill-current" />
               </div>
-              <h3 className="text-xl font-medium text-gray-900 mb-2">
-                Nenhum imóvel salvo
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-4">
+                Lista Vazia
               </h3>
-              <p className="text-gray-500 mb-6">
-                Você ainda não salvou nenhum imóvel. Explore nossos imóveis e
-                clique no coração para salvar seus favoritos.
+              <p className="text-slate-500 font-medium mb-10 leading-relaxed">
+                Nenhum imóvel foi salvo ainda. Comece sua jornada agora e adicione os imóveis que mais combinam com seu estilo de vida.
               </p>
-              <Link to="/landing">
-                <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-                  Explorar Imóveis
+              <Link to="/explore">
+                <Button className="w-full h-16 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl shadow-xl shadow-blue-500/20">
+                  Explorar Agora
                 </Button>
               </Link>
             </div>
           )}
-        </main>
-        <Footer />
-      </div>
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 };

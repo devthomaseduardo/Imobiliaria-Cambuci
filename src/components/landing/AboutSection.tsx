@@ -10,9 +10,9 @@ interface AboutSectionProps {
 }
 
 const AboutSection = ({
-  title = "Sobre a Imobiliária Cambuci",
-  subtitle = "Há mais de 15 anos ajudando famílias a encontrar o lar ideal no Cambuci",
-  companyName = "Imobiliária Cambuci",
+  title = "Sobre a Imobiliária JTG",
+  subtitle = "Há mais de 15 anos ajudando famílias a encontrar o lar ideal",
+  companyName = "Imobiliária JTG",
   companyImage = "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&q=80",
 }: AboutSectionProps) => {
   return (

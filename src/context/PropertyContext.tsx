@@ -1,11 +1,13 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { Property } from "@/types/property";
+import { properties as allPropertiesData } from "@/data/properties";
 
 type PropertyContextType = {
   savedProperties: Property[];
   saveProperty: (property: Property) => void;
   removeProperty: (propertyId: string) => void;
   isSaved: (propertyId: string) => boolean;
+  allProperties: Property[];
 };
 
 const PropertyContext = createContext<PropertyContextType | undefined>(
@@ -41,10 +43,16 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({
     return savedProperties.some((p) => p.id === propertyId);
   };
 
+  const value = useMemo(() => ({
+    savedProperties,
+    saveProperty,
+    removeProperty,
+    isSaved,
+    allProperties: allPropertiesData
+  }), [savedProperties]);
+
   return (
-    <PropertyContext.Provider
-      value={{ savedProperties, saveProperty, removeProperty, isSaved }}
-    >
+    <PropertyContext.Provider value={value}>
       {children}
     </PropertyContext.Provider>
   );

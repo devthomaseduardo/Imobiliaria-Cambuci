@@ -7,86 +7,118 @@ import {
   Coffee,
   ShoppingBag,
   Train,
+  CheckCircle2,
+  Navigation,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface NeighborhoodSectionProps {
   title?: string;
   subtitle?: string;
-  backgroundImage?: string;
 }
 
 const NeighborhoodSection = ({
-  title = "Conheça o Cambuci",
-  subtitle = "Um bairro tradicional com excelente localização e infraestrutura completa",
-  backgroundImage = "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1200&q=80",
+  title = "Viver em São Paulo",
+  subtitle = "O equilíbrio perfeito entre a tradição paulistana e o dinamismo urbano de uma metrópole global.",
 }: NeighborhoodSectionProps) => {
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-blue-900 mb-2">{title}</h2>
-          <p className="text-blue-700 max-w-2xl mx-auto">{subtitle}</p>
+    <section className="py-24 bg-slate-950 text-white overflow-hidden relative">
+      {/* Decorative background elements */}
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-600/5 blur-[120px] rounded-full -translate-y-1/2"></div>
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-3xl mb-16">
+          <span className="text-blue-500 font-black uppercase tracking-widest text-xs mb-4 block">Exploração Regional</span>
+          <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-6">{title}</h2>
+          <p className="text-slate-400 text-lg font-medium leading-relaxed max-w-2xl">{subtitle}</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          <div className="relative h-[400px] rounded-xl overflow-hidden shadow-lg">
-            <img
-              src={backgroundImage}
-              alt="Bairro do Cambuci"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-blue-900/70 to-transparent flex items-end">
-              <div className="p-6">
-                <div className="flex items-center mb-2">
-                  <MapPin className="h-5 w-5 text-orange-400 mr-2" />
-                  <span className="text-white font-medium">
-                    Cambuci, São Paulo
-                  </span>
-                </div>
-                <p className="text-white/90 text-sm">
-                  Um dos bairros mais tradicionais e bem localizados da cidade
-                </p>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="relative h-[450px] rounded-3xl overflow-hidden md:mt-12 group"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1542361345-89e58247f2d5?q=80&w=2070&auto=format&fit=crop"
+                alt="Parque da Aclimação"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+              <div className="absolute bottom-6 left-6">
+                 <span className="bg-blue-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-2 inline-block">Área Verde</span>
+                 <h4 className="text-xl font-black">Parque da Aclimação</h4>
+                 <p className="text-slate-300 text-xs font-bold">Apenas 800m do centro do bairro</p>
               </div>
+            </motion.div>
+
+            <div className="space-y-4">
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="relative h-[215px] rounded-3xl overflow-hidden group"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop"
+                  alt="Gastronomia Cambuci"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+                <div className="absolute bottom-4 left-6">
+                   <h4 className="text-lg font-black">Gastronomia Tradicional</h4>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="relative h-[215px] rounded-3xl overflow-hidden group"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1517733948473-7c0bb017e3bd?q=80&w=2070&auto=format&fit=crop"
+                  alt="Transporte"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+                <div className="absolute bottom-4 left-6">
+                   <h4 className="text-lg font-black">Conectividade Total</h4>
+                </div>
+              </motion.div>
             </div>
           </div>
 
-          <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-blue-800">
-              Por que escolher o Cambuci?
-            </h3>
-            <p className="text-gray-600">
-              O Cambuci é um bairro tradicional de São Paulo que combina
-              história, excelente localização e infraestrutura completa. Próximo
-              ao centro e com fácil acesso a diversas regiões da cidade, o
-              bairro oferece qualidade de vida e valorização imobiliária.
-            </p>
+          <div className="lg:col-span-5 space-y-10">
+            <div>
+              <h3 className="text-3xl font-black tracking-tight mb-6 flex items-center gap-3">
+                <Navigation className="text-blue-500 h-8 w-8" />
+                Localização Privilegiada
+              </h3>
+              <p className="text-slate-400 font-medium leading-relaxed">
+                Situado estrategicamente entre o Centro Histórico, a Aclimação e o Ipiranga, o Cambuci oferece um acesso inigualável aos principais polos econômicos e culturais de São Paulo.
+              </p>
+            </div>
 
-            <div className="grid grid-cols-2 gap-4 mt-6">
-              <FeatureCard
-                icon={<Building className="h-6 w-6 text-orange-500" />}
-                title="Arquitetura"
-                description="Mistura de construções históricas e empreendimentos modernos"
+            <div className="grid grid-cols-1 gap-6">
+              <ModernFeature 
+                icon={<Train className="text-blue-400" />}
+                title="Mobilidade Integrada"
+                desc="Próximo à Estação Pedro II e acesso rápido às Avenidas do Estado e Radial Leste."
               />
-              <FeatureCard
-                icon={<Train className="h-6 w-6 text-orange-500" />}
-                title="Transporte"
-                description="Fácil acesso ao metrô e diversas linhas de ônibus"
+              <ModernFeature 
+                icon={<Coffee className="text-amber-400" />}
+                title="Lifestyle Urbano"
+                desc="Cercado por cafeterias artesanais, empórios tradicionais e serviços de alto padrão."
               />
-              <FeatureCard
-                icon={<Palmtree className="h-6 w-6 text-orange-500" />}
-                title="Áreas Verdes"
-                description="Praças e áreas de lazer para toda a família"
-              />
-              <FeatureCard
-                icon={<ShoppingBag className="h-6 w-6 text-orange-500" />}
-                title="Comércio"
-                description="Comércio local diversificado e completo"
+              <ModernFeature 
+                icon={<Building className="text-emerald-400" />}
+                title="Valorização Ativa"
+                desc="Região em constante processo de modernização e alta demanda para novos projetos."
               />
             </div>
 
-            <Button className="mt-6 bg-blue-700 hover:bg-blue-800 text-white">
-              Conheça mais sobre o bairro
-            </Button>
+            <div className="pt-6">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 font-black text-lg px-10 py-7 rounded-2xl shadow-xl shadow-blue-500/20 transition-all">
+                Baixar Dossier do Bairro
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -94,24 +126,14 @@ const NeighborhoodSection = ({
   );
 };
 
-interface FeatureCardProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}
-
-const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
-  return (
-    <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-      <div className="flex items-start">
-        <div className="mr-3 mt-1">{icon}</div>
-        <div>
-          <h4 className="font-medium text-blue-900">{title}</h4>
-          <p className="text-sm text-gray-600">{description}</p>
-        </div>
-      </div>
+const ModernFeature = ({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) => (
+  <div className="flex items-start gap-4 p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+    <div className="p-3 bg-white/5 rounded-xl border border-white/10">{icon}</div>
+    <div>
+      <h4 className="font-black text-white text-lg tracking-tight mb-1">{title}</h4>
+      <p className="text-slate-500 text-sm font-medium leading-snug">{desc}</p>
     </div>
-  );
-};
+  </div>
+);
 
 export default NeighborhoodSection;

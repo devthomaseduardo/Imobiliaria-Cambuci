@@ -8,6 +8,13 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json({ limit: "200kb" }));
 
+const routePrefix = (() => {
+  const raw = process.env.ROUTE_PREFIX ?? process.env.BASE_PATH ?? "";
+  if (!raw) return "";
+  if (raw === "/") return "";
+  return raw.startsWith("/") ? raw.replace(/\/$/, "") : `/${raw.replace(/\/$/, "")}`;
+})();
+
 const leadSchema = z.object({
   source: z.string(),
   createdAt: z.string(),
@@ -30,11 +37,13 @@ const leadSchema = z.object({
   message: z.string().optional(),
 });
 
-app.get("/health", (_req, res) => {
+const router = express.Router();
+
+router.get("/health", (_req, res) => {
   res.status(200).json({ ok: true });
 });
 
-app.post("/leads", (req, res) => {
+router.post("/leads", (req, res) => {
   const parsed = leadSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ ok: false, error: "invalid_payload" });
@@ -46,6 +55,13 @@ app.post("/leads", (req, res) => {
 
   return res.status(200).json({ ok: true });
 });
+
+// Sempre serve sem prefixo (útil em dev/local).
+app.use(router);
+// E, se houver prefixo (ex.: `/_/backend`), serve também nele.
+if (routePrefix) {
+  app.use(routePrefix, router);
+}
 
 const port = Number(process.env.PORT ?? 8787);
 app.listen(port, () => {
